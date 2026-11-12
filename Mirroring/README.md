@@ -26,24 +26,25 @@ Pose-Nachrichten enthalten `type: "pose"`, `schemaVersion: 1`,
 World-Landmarks in Metern relativ zur Huefte. Bilder werden nicht gesendet.
 Unity verwirft falsche Versionen, alte Frames und nicht-endliche Werte.
 
-## Erster Unity-Armtest
+## Mirroring-Demo in Unity
 
 1. Dienst mit dem Befehl oben starten. Die Webcam bleibt bis zur Verbindung aus.
-2. In Unity 6000.3.12f1 `Assets/_Project/Scenes/Main.unity` oeffnen.
-3. Am EVA-Objekt, das `EVAAnimationController` traegt, die Komponenten
-   `EVAPoseReceiver` und `EVAOneArmMirroring` hinzufuegen. Beide finden ihre
-   Referenzen auf demselben Objekt automatisch. Der Receiver startet Kamera 0.
-4. Play starten und der Kamera frontal gegenueberstehen. Die erste erkannte
+2. In Unity 6000.3.12f1 `Assets/_Project/Scenes/MirroringDemo.unity` oeffnen.
+3. Play starten und der Kamera frontal gegenueberstehen. Die erste erkannte
    Pose dient als Kalibrierung; danach den rechten Arm bewegen. Standardmaessig
-   folgt der linke Avatararm als visuelles Spiegelbild. Der Tracking-Status
-   ist ueber `EVAPoseReceiver.LastStatus` abfragbar.
+   folgt der linke Avatararm als visuelles Spiegelbild.
+4. Den sichtbaren Regler bewegen: `0 %` zeigt nur die normale EVA-Animation,
+   `50 %` mischt beide Bewegungen, `100 %` nutzt die volle berechnete
+   Armspiegelung. Der Startwert ist bei jedem Play `70 %`. Ober- und Unterarm
+   verwenden denselben Wert. Der Status unter dem Regler zeigt Verbindung,
+   Kamera- oder Trackingfehler an.
 
-Der Armtest ist eine erste technische Integration, noch keine abgenommene
-Standalone-Demo. `Main.unity` startet weiterhin das separate Sprachbackend.
-Ausfuehrungsreihenfolge: Animator-Basispose, Gaze, dann Arm-Mirroring in
-`LateUpdate`. Kamera und WebSocket werden beim Verlassen von Play
-freigegeben; der separat gestartete Dienst bleibt an. Eine echte
-Webcam-/Unity-Laufzeitpruefung steht noch aus.
+Die Testszene enthaelt keinen Sprachbackend-Launcher und keine Gespraechs-UI.
+`Main.unity` bleibt die normale EVA-Anwendung. Ausfuehrungsreihenfolge:
+Animator-Basispose, Gaze, dann Arm-Mirroring in `LateUpdate`. Bei Trackingverlust
+blendet der Arm zur Basisanimation zurueck. Kamera und WebSocket werden beim
+Verlassen von Play freigegeben; der separat gestartete Pose-Dienst bleibt an.
+Eine echte Webcam-/Unity-Laufzeitpruefung steht noch aus.
 
 ## Hinweise
 - **CPU-Delegat**: Standardmaeßig CPU-basiert (optimiert fuer EVA 8GB VRAM).

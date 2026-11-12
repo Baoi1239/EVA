@@ -53,6 +53,7 @@ public sealed class EVAVRController : MonoBehaviour
     )]
     private static void EnsureInstanceExists()
     {
+        if (FindFirstObjectByType<EVAMirroringDemoUI>() != null) return;
         if (
             FindFirstObjectByType<EVAVRController>(
                 FindObjectsInactive.Include

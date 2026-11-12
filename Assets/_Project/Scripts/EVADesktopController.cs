@@ -20,7 +20,8 @@ public sealed class EVADesktopController : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void EnsureInstanceExists()
     {
-        if (!EVAControlSettings.UseVR && FindFirstObjectByType<EVADesktopController>() == null)
+        if (!EVAControlSettings.UseVR && FindFirstObjectByType<EVADesktopController>() == null
+            && FindFirstObjectByType<EVAMirroringDemoUI>() == null)
             new GameObject("EVA Desktop Controller").AddComponent<EVADesktopController>();
     }
 

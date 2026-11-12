@@ -23,6 +23,12 @@ public sealed class EVAOneArmMirroring : MonoBehaviour
 
     public bool IsCalibrated => calibrated;
     public float CurrentWeight => weight;
+    public float Strength => strength;
+
+    public void SetStrength(float value)
+    {
+        strength = Mathf.Clamp01(value);
+    }
 
     private void Awake()
     {

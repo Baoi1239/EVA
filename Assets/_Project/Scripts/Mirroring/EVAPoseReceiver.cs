@@ -26,6 +26,14 @@ public sealed class EVAPoseFrame
 [DisallowMultipleComponent]
 public sealed class EVAPoseReceiver : MonoBehaviour
 {
+    [Serializable]
+    private sealed class ServiceMessage
+    {
+        public string type;
+        public string state;
+        public string message;
+    }
+
     [SerializeField] private string serviceUrl = "ws://127.0.0.1:8766";
     [SerializeField, Range(0, 10)] private int cameraIndex;
     [SerializeField, Min(0.1f)] private float reconnectSeconds = 2f;
@@ -121,7 +129,9 @@ public sealed class EVAPoseReceiver : MonoBehaviour
         if (frame == null) return;
         if (frame.type == "status" || frame.type == "error")
         {
-            LastStatus = json;
+            var serviceMessage = JsonUtility.FromJson<ServiceMessage>(json);
+            LastStatus = !string.IsNullOrEmpty(serviceMessage?.message)
+                ? serviceMessage.message : serviceMessage?.state ?? frame.type;
             if (frame.type == "error") latestFrame = null;
             return;
         }
