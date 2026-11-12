@@ -27,6 +27,8 @@
 # Machine-specific Python environments and generated files
 /Backend/.venv/
 /Backend/venv/
+/Mirroring/.venv/
+/Mirroring/models/
 __pycache__/
 *.py[cod]
 .pytest_cache/
