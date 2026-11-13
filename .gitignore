@@ -9,6 +9,9 @@
 /[Rr]ecordings/
 .vs/
 .idea/
+# Local Codex configuration and generated artifacts
+.codex/
+.codex-build/
 *.csproj
 *.sln
 *.slnx
