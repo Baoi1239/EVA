@@ -812,7 +812,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086430062}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f5c7691bdf36494eb04f710d220a0b5, type: 3}
   m_Name:
@@ -837,15 +837,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 719f273f4ff241ea9ad3481f5e1f172b, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::EVAOneArmMirroring
+  m_EditorClassIdentifier: Assembly-CSharp::EVAUpperBodyMirroring
   receiver: {fileID: 0}
   animationController: {fileID: 0}
   mirrorHorizontal: 1
-  avatarLeftArm: 1
   strength: 0.7
   minimumConfidence: 0.5
   fadeSeconds: 0.3
-  maximumRotationDegrees: 120
+  smoothingSeconds: 0.1
+  torsoLimits: {x: 30, y: 45, z: 20}
+  backwardLimit: 15
+  headLimits: {x: 30, y: 60, z: 25}
 --- !u!114 &1086430070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1259,7 +1261,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1752107168}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eddb942e79edf5042869ff8e9cd0692c, type: 3}
   m_Name:

@@ -28,6 +28,9 @@ public static class EVAMirroringDemoBuilder
         RemoveAll<EVAConversationDisplay>();
         RemoveAll<MicrophoneCapture>();
         RemoveAll<StreamingAudioPlayer>();
+        foreach (var visemes in Object.FindObjectsByType<EVAVisemeController>(
+            FindObjectsInactive.Include, FindObjectsSortMode.None))
+            visemes.enabled = false;
 
         var appearance = Object.FindFirstObjectByType<EVAAppearanceController>(FindObjectsInactive.Include);
         var animations = Object.FindFirstObjectByType<EVAAnimationController>(FindObjectsInactive.Include);
@@ -39,7 +42,10 @@ public static class EVAMirroringDemoBuilder
 
         var avatar = animations.gameObject;
         avatar.AddComponent<EVAPoseReceiver>();
-        avatar.AddComponent<EVAOneArmMirroring>();
+        var gaze = avatar.GetComponent<EVAGazeController>();
+        if (gaze) gaze.enabled = false;
+        var body = avatar.AddComponent<EVAUpperBodyMirroring>();
+        body.SetSmoothingSeconds(.1f);
         new GameObject("Mirroring Demo UI").AddComponent<EVAMirroringDemoUI>();
 
         EditorSceneManager.MarkSceneDirty(scene);
@@ -59,14 +65,16 @@ public static class EVAMirroringDemoBuilder
             || Object.FindFirstObjectByType<EVASelectionMenu>(FindObjectsInactive.Include) != null)
             throw new System.InvalidOperationException("Speech backend/menu remains in demo scene");
         var receiver = Object.FindFirstObjectByType<EVAPoseReceiver>(FindObjectsInactive.Include);
-        var arm = Object.FindFirstObjectByType<EVAOneArmMirroring>(FindObjectsInactive.Include);
+        var body = Object.FindFirstObjectByType<EVAUpperBodyMirroring>(FindObjectsInactive.Include);
         var ui = Object.FindFirstObjectByType<EVAMirroringDemoUI>(FindObjectsInactive.Include);
-        if (receiver == null || arm == null || ui == null)
-            throw new System.InvalidOperationException("Mirroring receiver, arm or UI missing");
+        if (receiver == null || body == null || ui == null)
+            throw new System.InvalidOperationException("Mirroring receiver, upper body or UI missing");
+        var gaze = body.GetComponent<EVAGazeController>();
+        if (gaze && gaze.enabled) throw new System.InvalidOperationException("Demo gaze controller enabled");
         foreach (float value in new[] { 0f, 0.5f, 1f })
         {
-            arm.SetStrength(value);
-            if (!Mathf.Approximately(arm.Strength, value))
+            body.SetStrength(value);
+            if (!Mathf.Approximately(body.Strength, value))
                 throw new System.InvalidOperationException("Strength setter failed at " + value);
         }
         Debug.Log("[EVA Mirroring] Demo validation passed: 0%, 50%, 100%; no speech backend");
