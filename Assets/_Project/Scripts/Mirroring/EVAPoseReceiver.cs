@@ -46,7 +46,13 @@ public sealed class EVAPoseReceiver : MonoBehaviour
     private long lastSequence = -1;
     private EVAPoseFrame latestFrame;
 
-    public string LastStatus { get; private set; } = "Disconnected";
+    private string lastStatus = "Disconnected";
+
+    public string LastStatus
+    {
+        get => latestFrame != null && !HasFreshPose ? "Keine neuen Pose-Daten" : lastStatus;
+        private set => lastStatus = value;
+    }
     public bool IsConnected => socket != null && socket.State == WebSocketState.Open;
     public EVAPoseFrame LatestFrame => latestFrame;
     public bool HasFreshPose => IsConnected && latestFrame != null && latestFrame.valid
@@ -132,7 +138,8 @@ public sealed class EVAPoseReceiver : MonoBehaviour
             var serviceMessage = JsonUtility.FromJson<ServiceMessage>(json);
             LastStatus = !string.IsNullOrEmpty(serviceMessage?.message)
                 ? serviceMessage.message : serviceMessage?.state ?? frame.type;
-            if (frame.type == "error") latestFrame = null;
+            if (frame.type == "error" || serviceMessage?.state == "idle")
+                latestFrame = null;
             return;
         }
         if (frame.type != "pose" || frame.schemaVersion != 1
